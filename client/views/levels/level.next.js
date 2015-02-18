@@ -34,13 +34,7 @@ Template.level.helpers({
       return "<div><button class='levelEdit btn btn-xs btn-danger'>Edit</button>&nbsp<button class='levelDelete btn btn-xs btn-danger'>Delete</button></div>";
     }
     return "";
-  },
-  del: function() {
-    if (this.userId && this.userId === Meteor.userId())  {
-      return "<div></div>";
-    }
-    return "";
-  }
+  }  
 });
 
 Template.level.events({
@@ -56,5 +50,9 @@ Template.level.events({
   'click button.levelEdit': function(evt, template) {
     Session.set('levelId', null);
     window.location = '/build?id=' + this._id;    
+  },
+  'click button.levelDelete': function(evt, template) {
+    Session.set('levelId', null);
+    Levels.remove({ _id : this._id});    
   }
 });
