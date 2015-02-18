@@ -1,8 +1,8 @@
 <template name="profile">
   <div class='levelsContainer {{hideIfGameVisible}}'>
-    <h1><span class='label label-success'><span class='fa fa-trophy'></span> This are your worls!</span></h1>
+    <h1><span class='label label-success'><span class='fa fa-trophy'></span> These are your worlds!</span></h1>
     <h3>You can edit or delete them</h3>
-    <div class="levels levelsConquer container-fluid">
+    <div class="levels container-fluid col-md-4">
     {{#each levels}}
       {{> level}}
     {{/each}}
