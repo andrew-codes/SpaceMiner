@@ -52,7 +52,10 @@ Template.level.events({
     window.location = '/build?id=' + this._id;    
   },
   'click button.levelDelete': function(evt, template) {
+    evt.preventDefault();
     Session.set('levelId', null);
-    Levels.remove({ _id : this._id});    
+    if (confirm("Are you sure you want to delete this world?")) {
+      Levels.remove({ _id : this._id});  
+    }
   }
 });
