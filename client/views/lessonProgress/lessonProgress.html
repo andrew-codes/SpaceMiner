@@ -1,0 +1,52 @@
+<template name='lessonProgress'>
+
+<div class='container-fluid'>
+  <div class='row jumbotron' style='text-align: center'>
+    <h1><span class='fa-comments-o fa'></span> {{lesson.title}}</h1>
+    <p>{{description}}</p>
+    <h3><span class='label label-info'><span class='fa-tags fa'></span> Main topics:</span>
+      {{#each lesson.topics_main}}
+      <span class='label label-default'>{{this}}</span>
+      {{/each}}
+    </h3>
+    <h4><span class='label label-primary'><span class='fa-tags fa'></span> Sub-topics:</span>
+      {{#each lesson.topics_sub}}
+      <span class='label label-default'>{{this}}</span>
+      {{/each}}
+    </h4>
+  </div>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+      <div class="panel-group" role="tablist" id='sec-accordion' aria-multiselectable="true">
+      {{#each lesson.sections}}
+        {{> lessonProgress_section}}
+      {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+
+<template name="lessonProgress_section">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="sec-{{index}}-heading">
+      <h3 class="panel-title"><a href='{{lessonSecLink}}'><b>{{title}}</b></a></h3>
+      <p>{{description}}</p>
+      <button class='btn btn-sm btn-primary' data-toggle="collapse" data-parent="#sec-accordion" data-target="#sec-{{index}}-body" aria-expanded="{{mostRecent}}" aria-controls="sec-{{index}}-body"><span class='fa-chevron-circle-down fa'></span> show section steps</button>
+      <span class='badge'>{{lastViewed}}</span>
+    </div>
+    <div id="sec-{{index}}-body" class="panel-collapse collapse {{sectionExpanded}}" role="tabpanel" aria-labelledby="sec-{{index}}-heading">
+      <div class="panel-body">
+        <ul class='list-group'>
+        {{#each parts}}
+          {{> lessonProgress_part}}
+        {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="lessonProgress_part">
+  <li class="list-group-item {{listClass}}"><span class='label label-danger'><b>{{index}}</b></span> <a href='{{lessonSecStepLink}}'>{{title}}</a> <span class='badge'>{{lastViewed}}</span></li>
+</template>

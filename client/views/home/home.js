@@ -67,6 +67,7 @@ var signals = AutoSignal.register('home', {
 
 Template.home.created = function() {
   Session.set('levelId', '');
+  Presence.presenceUpdate();
 };
 
 Template.home.helpers({
@@ -79,7 +80,7 @@ Template.home.helpers({
 Template.home.events({
   'click .gameShow': function() {
     signals.gameOpened.dispatch();
-  }  
+  }
 });
 
 var sort = { sort : { lastUpdated: -1 } };
