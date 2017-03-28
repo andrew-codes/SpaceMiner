@@ -32,6 +32,8 @@ function getEditor(template) {
 Template.editorProgram.rendered = function() {
   let defaultCode = this.data.program.code;
   var userProgram = getUserProgramForCurrentUser(this.data.program);
+  this.data.programBase = this.data.program;
+  this.data.programBaseLevelId = this.data.programBase.context.level;
   this.data.program = userProgram;
   let editor = getEditor(this);
   editor.setTheme('ace/theme/chrome');
@@ -59,6 +61,11 @@ Template.editorProgram.rendered = function() {
 function getId(instance) {
   return instance._instanceId;
 }
+
+const parseWorldDefinitionFromScript = script => {
+  const defaults = Game.getDefaults();
+  return window.ParseWorldDefinitionFromScript(script, defaults);
+};
 
 Template.editorProgram.helpers({
   getId: function() {
@@ -108,13 +115,6 @@ Template.editorProgram.events({
       array.forEach(printb);
     }
 
-    var ttt = {
-      get game() {
-        return window.tttGame.get();
-      },
-      update: function() { window.tttGame.set(this.game); }
-    };
-
     Meteor.call('es6compile', [code], (err, talkBabelToMe) => {
       var result;
       if (err) {
@@ -148,5 +148,38 @@ Template.editorProgram.events({
     var outputContainer = program.find('.ePrg-outputContainer');
     output.empty();
     outputContainer.effect('highlight', {color:'blue'});
+  },
+  'click .levelUpdate': (evt, template) => {    
+    const levelId = template.data.programBaseLevelId;
+    const editor = getEditor(template);
+    const script = editor.getSession().getValue();
+    const obj = parseWorldDefinitionFromScript(code);
+    const name = obj.worldName;
+
+    console.log('world: ', obj);
+
+    // Get the updated tile and sprites
+    const selections = [
+      'player/' + obj.sprites.player,
+      'enemy/' + obj.sprites.enemy,
+      'gem/' + obj.sprites.gem,
+      'coin/' + obj.sprites.coin,
+      'shot/' + obj.sprites.shot
+    ];
+
+    // Specify the exact properties to update
+    const props = {
+      name,
+      script,
+      selections,
+      tile: 'tile/' + obj.sprites.tile,
+      lastUpdated: new Date(),
+      updatedBy: userName()
+    };
+
+    Meteor.call('levelUpdate', levelId, props, null, function(err) {
+      console.log('levelUpdate err: ', err);
+      console.log('Finished updating...', template.data);
+    });
   }
 });

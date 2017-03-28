@@ -599,16 +599,17 @@ Meteor.startup(function() {
             Levels.upsert(id, {$set: levelDtoPoweredUp});
         });
       },
-      levelUpdate: (id, props, buildStepUpdateCounts) => {
+      levelUpdate: (id, props, buildStepUpdateCounts=null) => {
         let future = new Future();
         // TODO remove this code if we get it handled on client
         //let result = babel.transform(props.script, {stage:1, ast:false});
         //props.script = result.code;
         createLevelRecord(props, (propsPoweredUp)=> {
-          Levels.update(id, {
-            $set: propsPoweredUp,
-            $inc : buildStepUpdateCounts
-          }, function() {
+          const levelDoc = {
+            $set: propsPoweredUp
+          };
+          if (buildStepUpdateCounts !== null) levelDoc.$inc = buildStepUpdateCounts;
+          Levels.update(id, levelDoc, function() {
             return future.return(true);
           });
         });
