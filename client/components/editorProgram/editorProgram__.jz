@@ -17,20 +17,49 @@ function getUserProgramForCurrentUser(program) {
 }
 
 Template.editorProgram.created = function() {
-  this.editor = new SMEditor(this);
+  this._instanceId = Meteor.uuid();
 };
 
+function getEditor(template) {
+  var id = getId(template);
+  for (let path of ['modePath', 'themePath', 'workerPath', 'basePath']) {
+    ace.config.set(path, '/packages/mrt_ace-embed/ace');
+  }
+  var editor = ace.edit(id);
+  return editor;
+}
+
 Template.editorProgram.rendered = function() {
-  const defaultCode = this.data.program.code;
-  const userProgram = getUserProgramForCurrentUser(this.data.program);
-  // Reassign program from user-specific version if it exists
+  let defaultCode = this.data.program.code;
+  var userProgram = getUserProgramForCurrentUser(this.data.program);
+  this.data.programBase = this.data.program;
+  this.data.programBaseLevelId = this.data.programBase.context.level;
   this.data.program = userProgram;
-
-  // Get the correct code: from the program, or from defaults
-  let code = this.data.program.code;
+  let editor = getEditor(this);
+  editor.setTheme('ace/theme/chrome');
+  var session = editor.getSession();
+  session.setMode('ace/mode/javascript');
+  var code = this.data.program.code;
   if (!code || code.trim() === '') code = defaultCode;
+  editor.setOptions({
+    maxLines: 18,
+    minLines: 18,
+    fontSize: 20,
+    showPrintMargin: false,
+    readOnly: false,
+    highlightActiveLine: true,
+    highlightGutterLine: true
+  });
 
-  this.editor.render(code);
+  session.setOptions({useWorker: false});
+  session.setTabSize(2);
+  session.setValue(code);
+
+  editor.renderer.setPadding(20);
+}
+
+function getId(instance) {
+  return instance._instanceId;
 }
 
 const parseWorldDefinitionFromScript = script => {
@@ -39,25 +68,30 @@ const parseWorldDefinitionFromScript = script => {
 };
 
 Template.editorProgram.helpers({
-  getId() { return Template.instance().editor.editorId; },
-  contentEditable() { return this.contentEditable ? 'contentEditable' : '' },
-  contentEditableClass() { return this.contentEditable ? 'editable' : ''}
+  getId: function() {
+    return getId(Template.instance());
+  },
+  contentEditable: function() {
+    return this.contentEditable ? 'contentEditable' : '';
+  },
+  contentEditableClass: function() {
+    return this.contentEditable ? 'editable' : '';
+  }
 });
 
 Template.editorProgram.events({
-  'click .changesSave': (evt, template) => {
-    const editor = template.editor;
-    const code = editor.code;
-    console.log('code: ', code);
+  'click .changesSave': function(evt, template) {
+    var editor = getEditor(template);
+    var code = editor.getSession().getValue();
     template.data.program.code = code;
     updateUserProgram(template.data.program);
   },
   'click .execute': function(evt, template) {
-    const editor = template.editor;
-    const program = $(template.firstNode);
+    var editor = getEditor(template);
+    var program = $(template.firstNode);
     var useStringify = this.useStringify;
     var output = program.find('.ePrg-output');
-    var code = editor.code;
+    var code = editor.getSession().getValue();
     output.text('').hide();
     var printed = false;
     var console = {
@@ -114,5 +148,38 @@ Template.editorProgram.events({
     var outputContainer = program.find('.ePrg-outputContainer');
     output.empty();
     outputContainer.effect('highlight', {color:'blue'});
+  },
+  'click .levelUpdate': (evt, template) => {    
+    const levelId = template.data.programBaseLevelId;
+    const editor = getEditor(template);
+    const script = editor.getSession().getValue();
+    const obj = parseWorldDefinitionFromScript(code);
+    const name = obj.worldName;
+
+    console.log('world: ', obj);
+
+    // Get the updated tile and sprites
+    const selections = [
+      'player/' + obj.sprites.player,
+      'enemy/' + obj.sprites.enemy,
+      'gem/' + obj.sprites.gem,
+      'coin/' + obj.sprites.coin,
+      'shot/' + obj.sprites.shot
+    ];
+
+    // Specify the exact properties to update
+    const props = {
+      name,
+      script,
+      selections,
+      tile: 'tile/' + obj.sprites.tile,
+      lastUpdated: new Date(),
+      updatedBy: userName()
+    };
+
+    Meteor.call('levelUpdate', levelId, props, null, function(err) {
+      console.log('levelUpdate err: ', err);
+      console.log('Finished updating...', template.data);
+    });
   }
 });
