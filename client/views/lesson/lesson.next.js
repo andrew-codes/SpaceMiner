@@ -36,6 +36,68 @@ function setupWindowGlobals() {
   }
 }
 
+const lessonToAssetApiPayload = (lesson, scopeName) => {
+  const epic = {
+    AssetType: 'Epic',
+    Scope: scopeName,
+    Description: lesson.description,
+    Name: lesson.title,
+    Subs: []
+  };
+
+  for(const section of lesson.sections) {
+    const story = {
+      AssetType: 'Story',
+      Name: section.title,
+      Description: section.description,
+      Children: []
+    };
+
+    for(const part of section.parts) {
+      const task = {
+        AssetType: 'Task',
+        Name: part.title
+      };
+      story.Children.push(task);
+    }
+    epic.Subs.push(story);
+  }
+
+  return epic;
+};
+
+const v1Setup = lesson => {
+  const user = Meteor.user();
+  const scopeName = `${user.profile.nickName}'s Project`;
+  
+  const data = {
+    from: 'Epic',
+    where: {
+      Name: name,
+      'Scope.Name': scopeName
+    },
+    select: ['Name']
+  };
+
+  const client = new V1Client(user);
+
+  client.query({data})
+  .catch(error => console.error('Error querying existing Epic for Lesson: ', error))
+  .then(result => {
+    console.log('Query existing Epic for Lesson result: ', result);
+    if (result.data && result.data[0].length === 0) {
+      console.log('No Epic for Lesson found, will create...');
+      const payload = lessonToAssetApiPayload(lesson, scopeName);
+      client.assetsPost({data: payload})
+      .catch(error => console.error("Error creating Epic for Lesson: ", error))
+      .then(result => console.log("Epic for Lesson create succeeded. Assets created: ", result.data.assetsCreated.oidTokens.join(',')));
+    } else {
+      console.log('Found Epic for Lesson, will not create a new one');
+    }
+  });
+  
+};
+
 Template.lesson.rendered = function() {
   setupWindowGlobals();
 
@@ -45,6 +107,8 @@ Template.lesson.rendered = function() {
   // Insane: not sure why I have to do this, but it prevents errors...
   Lessons.update({_id: id}, {$inc: {views:1}}, function(err, count) {
     lesson = Router.current().data();
+    v1Setup(lesson);
+
     var secIndex = Router.current().params.query.sec;
     var partIndex = Router.current().params.query.part;
 

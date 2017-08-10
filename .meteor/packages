@@ -33,7 +33,7 @@ iamkevingreen:mixitup
 gwendall:auth-client-callbacks
 spacebars-compiler
 babel-compiler@6.14.1
-http@1.2.11
+http
 aldeed:clock
 #standard-minifiers
 
@@ -44,3 +44,5 @@ edgee:slingshot
 peerlibrary:aws-sdk
 email@1.1.18
 shell-server
+deanius:promise
+promise
