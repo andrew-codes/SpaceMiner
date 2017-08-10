@@ -713,4 +713,5 @@ ${source}
     cleanDbAndCreateDefaultRecords();
     configureCORS();
     configureCollectionAPI();
+
 });

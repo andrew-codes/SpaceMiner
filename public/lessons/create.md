@@ -2,80 +2,85 @@
 id: create
 author: Josh Gough
 topics:
- - functions
- - arguments
+ - creating worlds
  - drilling mines
 sub-topics:
- - events
- - vertical mines
+ - functions
 ---
 
 # Create a new world
 
-You create new worlds in SpaceMiner using JavaScript code. The easiest way involves calling **functions** built-into SpaceMiner to customize how the world gets drawn on the screen and how to change the world when different **events** happen.
-
-If the words **functions** and **events** are new to you, don't worry. You'll learn much more about what they mean within code as you go through the missions. For now, continue to see two simple definitions.
+You create new worlds in SpaceMiner using JavaScript code. You do this by calling **functions** built-into SpaceMiner to customize how the world gets drawn on the screen and how to change the world when different **events** happen.
 
 # Create a new world
 
 You create new worlds in SpaceMiner using JavaScript code. The easiest way involves calling **functions** built-into SpaceMiner to customize how the world gets drawn on the screen and how to change the world when different **events** happen.
 
-If the words **functions** and **events** are new to you, don't worry. You'll learn much more about what they mean within code as you go through the missions. For now, let's start with what a function is by continuing.
+If the words **functions** and **events** are new to you, don't worry. You'll learn much more about what they mean within code as you go through the missions. In this lesson, we'll only focus on functions, so let's continue to try out your first function.
 
 ## function
 
 Within SpaceMiner, a **function** is a word you type into the code that controls what the program does. 
 
-The first thing you can do is to start your new world. You do this by using the `start` function. Most functions in SpaceMiner need you to call them by adding parentheses on the end of them. For `start` that means you call it by typing it this way: `start()`.
+Hit the **Update & preview world** below to get your brand new world in a pop-up window. 
 
-Try it below!
+**Note:** you might need to unlock the pop-up blocker in your browser's top-right corner of this window to allow this first.
 
-${training('create', 'create', \`\`)}
+You'll notice that the world is very plain. It's just full of rocks! That's because you haven't used any functions yet! Let's keep moving.
 
-## Simple function: start
+${createSimple('create')}
 
-Is it still here?
+## start your world
 
-${training('create', 'create', \`\`)}
+You need to call the `start` function to get things happening on your world. Simply type `start` into the code editor below and then press the **Update & preview world** world button again.
 
-## FUNCTIONS ARGUMENTS
+Don't be surprised when the world looks the same as it did before. That's because you haven't passed any **arguments** to the `start` function!
 
-Some functions let you give them extra data. We call these extra **arguments**. In this case an argument is not something that makes the program angry. Instead, from the old Latin word *arguere*, it just means to **"make clear"**. When you give **arguments** to a function you are simply making it clear what you want the program to do for you.
+${createSimple('create')}
 
-But, don't be too angry with yourself if it takes you a while to get the hang of functions and arguments, and remember that even though SpaceMiner won't talk back to you, sometimes it does help to speak out loud what you are thinking and what you want it to do to make the thoughts clear in your own mind!
+## start an argument
 
-## Drilling Mines
+Some functions let or need you to give them extra pieces of data. We call these extra pieces of data **arguments**. 
 
- 
+In this case an argument is not something that makes the program angry. Instead, from the old Latin word *arguere*, it just means to **"make clear"**.
 
-## Simple Mines
+When you give **arguments** to a function you are simply making it clear what you want the program to do for you.
 
-Here's the simplest example:
+But, don't be too angry with yourself if it takes you a while to get the hang of functions and arguments. 
 
-```javascript
-start(mine);
-```
+SpaceMiner won't talk back to you if you do try to argue with it, but speaking aloud what you're trying to do might make it more clear in your own mind!
 
-If you run this code, you will see that the a simple mine gets drilled that reveals a coin.
+## Drill a mine with an argument
 
-Here's another example that drills two distinct mines:
+Let's use function arguments now to make your world look different. This is easy too:
 
-```javascript
-start(
-    mine,
-    mine(at(2))
-);
-```
-You could also think of this mine as being a single mine that contains two coins.
+Change that word `start` to this: `start(mine)` and then press the **Update & preview world** world button.
 
-And, here's one that drills a mine with three coins:
-```
-start(
-    mine,
-    mine(at(2)),
-    mine(at(3))
-);
-```
+${createSimple('create')}
+
+You should now see that a simple mine gets drilled at the top, left to reveals a coin.
+
+## Drill a larger mine
+
+Now that you've seen how to drill a small mine, let's drill a larger one.
+
+Modify your code so that it looks like this:
+
+${programExample('start(mine, mine(at(2)))')}
+
+${createSimple('create')}
+
+If you run this code, you will see that you now have a mine that reveals two coins.
+
+## Drill a mine with three coins
+
+Here's another example that drills a mine revealing three coins:
+
+${programExample('start(mine, mine(at(2)), mine(at(3)))')}
+
+${createSimple('create')}
+
+${ask('Are you starting to see a pattern here? How would you change the code to reveal four coins in a mine?')}
 
 ## Challenge: Drill a Four-Coin Mine
 

@@ -1,5 +1,11 @@
 Template.program.created = function() {
   this._instanceId = Meteor.uuid();
+  if (!_.has(this.data, 'contentEditable')) this.data = {
+    contentEditable : true,
+    script: '',
+    useStringify: true,
+    buttonsVisible: true
+  };
 };
 
 let aceEditorPathSet = false;
@@ -17,11 +23,6 @@ function getEditor(template) {
 }
 
 Template.program.rendered = function() {
-  if (!_.has(this.data, 'contentEditable')) this.data = {
-    contentEditable : true,
-    script: '',
-    useStringify: true
-  };
   var editor = getEditor(this);
   editor.setTheme("ace/theme/chrome");
   var session = editor.getSession();
@@ -59,6 +60,11 @@ Template.program.helpers({
   },
   contentEditableClass: function() {
     return this.contentEditable ? 'editable' : '';
+  },
+  buttonsVisible() {
+    const instance = Template.instance();
+    console.log('instance:', instance);
+    return instance.data.buttonsVisible;
   }
 });
 

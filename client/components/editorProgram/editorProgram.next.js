@@ -33,11 +33,6 @@ Template.editorProgram.rendered = function() {
   this.editor.render(code);
 }
 
-const parseWorldDefinitionFromScript = script => {
-  const defaults = Game.getDefaults();
-  return window.ParseWorldDefinitionFromScript(script, defaults);
-};
-
 Template.editorProgram.helpers({
   getId() { return Template.instance().editor.editorId; },
   contentEditable() { return this.contentEditable ? 'contentEditable' : '' },

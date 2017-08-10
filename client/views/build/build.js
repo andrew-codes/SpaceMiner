@@ -63,7 +63,6 @@ function updateDefaultSprite(customSpriteType) {
   });
 };
 
-
 var hideInstructions = new ReactiveVar(true);
 
 var customSpriteTypes = ['tile', 'enemy', 'coin', 'gem', 'player'];
