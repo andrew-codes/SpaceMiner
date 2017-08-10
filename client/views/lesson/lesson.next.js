@@ -67,19 +67,18 @@ const lessonToAssetApiPayload = (lesson, scopeName) => {
 };
 
 const v1Setup = lesson => {
-  const user = Meteor.user();
-  const scopeName = `${user.profile.nickName}'s Project`;
-  
+  const client = new V1Client();
+  const userName = client.userName;
+  const scopeName = `${userName}'s Project`;
+
   const data = {
     from: 'Epic',
     where: {
-      Name: name,
+      Name: lesson.title,
       'Scope.Name': scopeName
     },
     select: ['Name']
   };
-
-  const client = new V1Client(user);
 
   client.query({data})
   .catch(error => console.error('Error querying existing Epic for Lesson: ', error))
@@ -251,6 +250,62 @@ Template.popquiz.helpers({
   }
 });
 
+
+const updateV1StoryForSection = (lesson, sectionIndex) => {
+  const client = new V1Client();
+  const userName = client.userName;
+  const scopeName = `${userName}'s Project`;
+
+  const data = {
+    from: 'Story',
+    where: {
+      Name: lesson.sections[sectionIndex].title,
+      'Scope.Name': scopeName
+    },
+    set: {
+      Owners: userName,
+      Timebox: 'Iteration 1'
+    }
+  };
+
+  client.assetsPost({data})
+  .catch(error => console.error('Error updating Story for Section: ', error))
+  .then(result => {
+    if (result.data) {
+      console.log('Updating Story for Section succeeded: ', result.data.assetsModified.oidTokens.join(','));
+    } else {
+      console.log('Did not find Story for Section. Maybe it was deleted?');
+    }
+  });
+};
+
+const updateV1TaskForPart = (lesson, sectionIndex, partIndex) => {
+  const client = new V1Client();
+  const userName = client.userName;
+  const scopeName = `${userName}'s Project`;
+
+  const data = {
+    from: 'Task',
+    where: {
+      Name: lesson.sections[sectionIndex].parts[partIndex].title,
+      'Scope.Name': scopeName
+    },
+    set: {
+      Status: 'In Progress'
+    }
+  };
+
+  client.assetsPost({data})
+  .catch(error => console.error('Error updating Task for Part: ', error))
+  .then(result => {
+    if (result.data) {
+      console.log('Updating Task for Part succeeded: ', result.data.assetsModified.oidTokens.join(','));
+    } else {
+      console.log('Did not find Task for Part. Maybe it was deleted?');
+    }
+  });
+};
+
 Template.section.helpers({
   current() {
     var index = currentSecIndex.get();    
@@ -326,6 +381,7 @@ Template.sectionNav.events({
     var lesson = getLesson();
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
     updateLessonProgressPartLastViewed(lessonProgress, template.data.index, 0, true);
+    updateV1StoryForSection(lesson, template.data.index);
   }
 });
 
@@ -379,7 +435,8 @@ Template.sectionNavParts.events({
   'click .lesson-section-nav-parts-part-link': function(evt, template) {
     currentPartIndex.set(this.index);
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
-    updateLessonProgressPartLastViewed(lessonProgress, currentSecIndex.get(), this.index);    
+    updateLessonProgressPartLastViewed(lessonProgress, currentSecIndex.get(), this.index);
+    updateV1TaskForPart(lesson, currentSecIndex.get(), this.index);
   }
 });
 

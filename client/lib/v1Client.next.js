@@ -7,10 +7,15 @@ const getAuth = name => btoa(`${name}`);
 const makeBeforeSend = auth => x => x.setRequestHeader('Authorization', 'Basic ' + auth);
 
 class V1Client {
-	constructor(user, authString=null) {
+	constructor(authString=null, user=null) {
+		if (user === null) user = Meteor.user();
 		this.user = user;
 		if (authString === null) authString = `${user.profile.nickName}:${user.profile.nickName}`;
 		this.auth = getAuth(authString);
+	}
+
+	get userName() {
+		return this.user.profile.nickName;
 	}
 
 	query(options) {
