@@ -32,56 +32,7 @@ Meteor.startup(function () {
   
   Accounts.onLogin(function() {
     Presence.presenceUpdate();
-
-    const client = new V1Client('admin:admin');
-    const userName = client.userName;
-    const scopeName = `${userName}'s Project`;
-
-    let data = {
-      from: 'Member',
-      where: {
-        Nickname: userName
-      },
-      select: ['Nickname']
-    };
-    client.query({data})
-    .catch(error => console.error("Error querying for existing Member: ", error))
-    .then(result => {
-      console.log('Query existing Member result: ', result);
-      if (result.data && result.data[0].length === 0) {
-        data = [
-          {
-            AssetType: 'Scope',
-            Parent: 'System (All Projects)',
-            Name: scopeName,
-            Schedule: 'Default Schedule',
-            BeginDate: '8/20/2017'
-          },
-          {
-            AssetType: 'Member',
-            Name: userName,
-            Password: userName,
-            Nickname: userName,
-            Username: userName,
-            DefaultRole: "Role.Name'Project Admin",
-            Scopes: scopeName
-          },
-          {
-            AssetType: 'TeamRoom',
-            Name: `${userName}'s Room`,
-            Schedule: 'Default Schedule',
-            Scope: scopeName
-          }
-        ];
-
-        client.assetsPost({data}) 
-        .catch(error => console.error("Error attempting to create new Member: ", error))
-        .then(result => console.log("Create new Scope, Member, TeamRoom succeeded. Assets created", result.data.assetsCreated.oidTokens.join(',')));
-      } else {
-        console.log('Existing Member found, will not create a new one');
-      }
-    });
-
+    Bus.signal('userLoggedIn').dispatch();
   });
 
 });

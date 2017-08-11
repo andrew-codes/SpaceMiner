@@ -36,67 +36,6 @@ function setupWindowGlobals() {
   }
 }
 
-const lessonToAssetApiPayload = (lesson, scopeName) => {
-  const epic = {
-    AssetType: 'Epic',
-    Scope: scopeName,
-    Description: lesson.description,
-    Name: lesson.title,
-    Subs: []
-  };
-
-  for(const section of lesson.sections) {
-    const story = {
-      AssetType: 'Story',
-      Name: section.title,
-      Description: section.description,
-      Children: []
-    };
-
-    for(const part of section.parts) {
-      const task = {
-        AssetType: 'Task',
-        Name: part.title
-      };
-      story.Children.push(task);
-    }
-    epic.Subs.push(story);
-  }
-
-  return epic;
-};
-
-const v1Setup = lesson => {
-  const client = new V1Client();
-  const userName = client.userName;
-  const scopeName = `${userName}'s Project`;
-
-  const data = {
-    from: 'Epic',
-    where: {
-      Name: lesson.title,
-      'Scope.Name': scopeName
-    },
-    select: ['Name']
-  };
-
-  client.query({data})
-  .catch(error => console.error('Error querying existing Epic for Lesson: ', error))
-  .then(result => {
-    console.log('Query existing Epic for Lesson result: ', result);
-    if (result.data && result.data[0].length === 0) {
-      console.log('No Epic for Lesson found, will create...');
-      const payload = lessonToAssetApiPayload(lesson, scopeName);
-      client.assetsPost({data: payload})
-      .catch(error => console.error("Error creating Epic for Lesson: ", error))
-      .then(result => console.log("Epic for Lesson create succeeded. Assets created: ", result.data.assetsCreated.oidTokens.join(',')));
-    } else {
-      console.log('Found Epic for Lesson, will not create a new one');
-    }
-  });
-  
-};
-
 Template.lesson.rendered = function() {
   setupWindowGlobals();
 
@@ -106,7 +45,7 @@ Template.lesson.rendered = function() {
   // Insane: not sure why I have to do this, but it prevents errors...
   Lessons.update({_id: id}, {$inc: {views:1}}, function(err, count) {
     lesson = Router.current().data();
-    v1Setup(lesson);
+    Bus.signal('userOpenedLesson').dispatch(lesson);
 
     var secIndex = Router.current().params.query.sec;
     var partIndex = Router.current().params.query.part;
@@ -250,62 +189,6 @@ Template.popquiz.helpers({
   }
 });
 
-
-const updateV1StoryForSection = (lesson, sectionIndex) => {
-  const client = new V1Client();
-  const userName = client.userName;
-  const scopeName = `${userName}'s Project`;
-
-  const data = {
-    from: 'Story',
-    where: {
-      Name: lesson.sections[sectionIndex].title,
-      'Scope.Name': scopeName
-    },
-    set: {
-      Owners: userName,
-      Timebox: 'Iteration 1'
-    }
-  };
-
-  client.assetsPost({data})
-  .catch(error => console.error('Error updating Story for Section: ', error))
-  .then(result => {
-    if (result.data) {
-      console.log('Updating Story for Section succeeded: ', result.data.assetsModified.oidTokens.join(','));
-    } else {
-      console.log('Did not find Story for Section. Maybe it was deleted?');
-    }
-  });
-};
-
-const updateV1TaskForPart = (lesson, sectionIndex, partIndex) => {
-  const client = new V1Client();
-  const userName = client.userName;
-  const scopeName = `${userName}'s Project`;
-
-  const data = {
-    from: 'Task',
-    where: {
-      Name: lesson.sections[sectionIndex].parts[partIndex].title,
-      'Scope.Name': scopeName
-    },
-    set: {
-      Status: 'In Progress'
-    }
-  };
-
-  client.assetsPost({data})
-  .catch(error => console.error('Error updating Task for Part: ', error))
-  .then(result => {
-    if (result.data) {
-      console.log('Updating Task for Part succeeded: ', result.data.assetsModified.oidTokens.join(','));
-    } else {
-      console.log('Did not find Task for Part. Maybe it was deleted?');
-    }
-  });
-};
-
 Template.section.helpers({
   current() {
     var index = currentSecIndex.get();    
@@ -381,7 +264,7 @@ Template.sectionNav.events({
     var lesson = getLesson();
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
     updateLessonProgressPartLastViewed(lessonProgress, template.data.index, 0, true);
-    updateV1StoryForSection(lesson, template.data.index);
+    Bus.signal('userOpenedLessonSection').dispatch({lesson, sectionIndex: template.data.index});
   }
 });
 
@@ -436,7 +319,12 @@ Template.sectionNavParts.events({
     currentPartIndex.set(this.index);
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
     updateLessonProgressPartLastViewed(lessonProgress, currentSecIndex.get(), this.index);
-    updateV1TaskForPart(lesson, currentSecIndex.get(), this.index);
+    Bus.signal('userOpenedLessonSectionPart').dispatch({
+      lesson,
+      sectionIndex: currentSecIndex.get(),
+      partIndex: this.index,
+      status: 'In Progress'
+    });
   }
 });
 

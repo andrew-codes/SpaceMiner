@@ -45,37 +45,14 @@ Template.selfAssessment.helpers({
   }
 });
 
-const updateV1TaskForPart = (resourcePath) => {
+const updateV1TaskForPart = resourcePath => {
   // TODO: Fix total hack!
   const lesson = Router.current().data();
   const pathParts = resourcePath.split('/');
   const sectionIndex = pathParts[2];
   const partIndex = pathParts[3];
 
-  const client = new V1Client();
-  const userName = client.userName;
-  const scopeName = `${userName}'s Project`;
-
-  const data = {
-    from: 'Task',
-    where: {
-      Name: lesson.sections[sectionIndex].parts[partIndex].title,
-      'Scope.Name': scopeName
-    },
-    set: {
-      Status: 'Completed'
-    }
-  };
-
-  client.assetsPost({data})
-  .catch(error => console.error('Error updating Task for Part: ', error))
-  .then(result => {
-    if (result.data) {
-      console.log('Updating Task for Part succeeded: ', result.data.assetsModified.oidTokens.join(','));
-    } else {
-      console.log('Did not find Task for Part. Maybe it was deleted?');
-    }
-  });
+  V1Integration.updateTaskForPart(lesson, sectionIndex, partIndex, 'Completed');
 };
 
 
