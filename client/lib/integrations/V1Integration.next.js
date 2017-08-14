@@ -146,6 +146,12 @@ class V1Integration {
     const userName = client.userName;
     const scopeName = `${userName}'s Project`;
 
+    const statusMap = {
+      'not': 'In Progress',
+      'almost': 'In Progress',
+      'yes': 'Completed'
+    };
+
     const data = {
       from: 'Task',
       where: {
@@ -153,7 +159,7 @@ class V1Integration {
         'Scope.Name': scopeName
       },
       set: {
-        Status: status
+        Status: statusMap[status]
       }
     };
 
@@ -169,6 +175,6 @@ class V1Integration {
   }
 };
 
-Bus.signalByConvention(V1Integration);
+subscribeAll(V1Integration);
 
 this.V1Integration = V1Integration;

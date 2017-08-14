@@ -45,14 +45,15 @@ Template.selfAssessment.helpers({
   }
 });
 
-const updateV1TaskForPart = resourcePath => {
+const publishUserOpenedLessonSectionPartEvent = resourcePath => {
   // TODO: Fix total hack!
   const lesson = Router.current().data();
   const pathParts = resourcePath.split('/');
   const sectionIndex = pathParts[2];
   const partIndex = pathParts[3];
 
-  V1Integration.updateTaskForPart(lesson, sectionIndex, partIndex, 'Completed');
+  // TODO: use better event name here
+  publish('userOpenedLessonSectionPart', {lesson, sectionIndex, partIndex, status: 'yes'});
 };
 
 
@@ -67,7 +68,7 @@ Template.selfAssessment.events({
     const inst = Template.instance();
     const resourcePath = inst.data.resourcePath;
     insertAndAdvance(inst, 'yes');
-    updateV1TaskForPart(resourcePath);
+    publishUserOpenedLessonSectionPartEvent(resourcePath);
   },
   'click .not-help'() {
   	SelfAssessments.helpRequest(Template.instance().data.resourcePath);

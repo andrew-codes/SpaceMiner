@@ -18,4 +18,4 @@ class JIRAIntegration {
   }
 };
 
-Bus.signalByConvention(JIRAIntegration);
+subscribeAll(JIRAIntegration);

@@ -32,7 +32,7 @@ Meteor.startup(function () {
   
   Accounts.onLogin(function() {
     Presence.presenceUpdate();
-    Bus.signal('userLoggedIn').dispatch();
+    publish('userLoggedIn');
   });
 
 });

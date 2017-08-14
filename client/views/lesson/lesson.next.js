@@ -9,8 +9,19 @@ var lessonProgress;
 var lessonDep = new Tracker.Dependency;
 const sectionNavVisible = new ReactiveVar(true);
 
-var currentSecIndex = new ReactiveVar(0);
-var currentPartIndex = new ReactiveVar(0);
+const currentSecIndex = new ReactiveVar(0);
+const configureAutoPublishUserOpenedLessonSection = lesson =>
+  Tracker.autorun(() => publish('userOpenedLessonSection', {lesson, sectionIndex: currentSecIndex.get()}));
+
+const currentPartIndex = new ReactiveVar(0);
+let currentPartUnderstanding = 'not';
+const configureAutoPublishUserOpenedLessonSectionPart = lesson =>
+  Tracker.autorun(() => publish('userOpenedLessonSectionPart', {
+    lesson, 
+    sectionIndex: currentSecIndex.get(),
+    partIndex: currentPartIndex.get(),
+    status: currentPartUnderstanding
+  }));
 
 function updateLessonProgress(lessonProgress) {
   LessonsProgress.update({_id:lessonProgress._id}, {$set: _.omit(lessonProgress, '_id')});
@@ -45,7 +56,7 @@ Template.lesson.rendered = function() {
   // Insane: not sure why I have to do this, but it prevents errors...
   Lessons.update({_id: id}, {$inc: {views:1}}, function(err, count) {
     lesson = Router.current().data();
-    Bus.signal('userOpenedLesson').dispatch(lesson);
+    publish('userOpenedLesson', lesson);
 
     var secIndex = Router.current().params.query.sec;
     var partIndex = Router.current().params.query.part;
@@ -69,6 +80,8 @@ Template.lesson.rendered = function() {
     currentPartIndex.set(partIndex);
     lessonDep.changed();
     updateLessonProgressPartLastViewed(lessonProgress, secIndex, partIndex, true);
+    configureAutoPublishUserOpenedLessonSection(lesson);
+    configureAutoPublishUserOpenedLessonSectionPart(lesson);
   });
 }
 
@@ -264,7 +277,6 @@ Template.sectionNav.events({
     var lesson = getLesson();
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
     updateLessonProgressPartLastViewed(lessonProgress, template.data.index, 0, true);
-    Bus.signal('userOpenedLessonSection').dispatch({lesson, sectionIndex: template.data.index});
   }
 });
 
@@ -319,12 +331,6 @@ Template.sectionNavParts.events({
     currentPartIndex.set(this.index);
     LessonsProgress.overlayOnLesson(lesson, lessonProgress);
     updateLessonProgressPartLastViewed(lessonProgress, currentSecIndex.get(), this.index);
-    Bus.signal('userOpenedLessonSectionPart').dispatch({
-      lesson,
-      sectionIndex: currentSecIndex.get(),
-      partIndex: this.index,
-      status: 'In Progress'
-    });
   }
 });
 
