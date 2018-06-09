@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": [
     "airbnb",
     "prettier"
@@ -14,11 +14,7 @@
       "error",
       {
         "devDependencies": [
-          "**/docs/**/*.js",
           "**/__tests__/**/*.js",
-          "**/examples/**/*.js",
-          "./projector.js",
-          "./resolver.js"
         ]
       }
     ],
@@ -83,4 +79,4 @@
       }
     }
   ]
-}
+};

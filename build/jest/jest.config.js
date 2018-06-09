@@ -1,5 +1,6 @@
 const config = {
-  testMatch: [`${process.cwd()}/**/__tests__/**/*.js`],
+  rootDir: process.cwd(),
+  testMatch: [`**/__tests__/**/*.js`],
   testPathIgnorePatterns: [
     // ignore files that are under a directory starting with "_" at the root of __tests__
     '/__tests__\\/_.*?',
@@ -10,14 +11,14 @@ const config = {
   transformIgnorePatterns: ['\\/node_modules\\/(?!@space-miner)'],
   resolver: require.resolve('./src/resolver.js'),
   transform: {
-    '^.+\\.js$': 'babel-jest',
+    '^.+\\.js?$': require.resolve('./src/transformer.js'),
   },
   moduleFileExtensions: ['js'],
   moduleNameMapper: {
-    '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/build/jest-config/src/fileMock.js',
+    '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/build/jest/src/fileMock.js',
   },
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  setupFiles: ['./build/jest-config/src/setupFile.js'],
+  setupFiles: [require.resolve('./src/setupFile.js')],
 };
 
 module.exports = config;

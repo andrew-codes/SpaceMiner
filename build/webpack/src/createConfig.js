@@ -4,7 +4,8 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const babelConfig = require('@space-miner/babel-config');
 
 module.exports = (
   {
@@ -54,6 +55,7 @@ module.exports = (
         loader: require.resolve('babel-loader'),
         options: {
           cacheDirectory: true,
+          ...babelConfig,
         },
       },
       {

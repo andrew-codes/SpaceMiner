@@ -8,9 +8,11 @@ const port = process.env.PORT;
 
 const app = new express();
 if (env === 'development') {
+  /* eslint-disable import/no-extraneous-dependencies */
   const createWebpackCompiler = require('@space-miner/webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
+  /* eslint-enable import/no-extraneous-dependencies */
   const publicPath = '/dist';
   const compiler = createWebpackCompiler({ cwd: __dirname, entry: path.join('client', 'index.js'), publicPath });
   app.use(webpackDevMiddleware(compiler, {

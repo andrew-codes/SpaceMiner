@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 const jest = require('jest-cli');
-const config = require('./../jest.config');
+const path = require('path');
 
-jest.runCLI(config, [process.cwd()]);
+jest.runCLI({
+  config: require.resolve('./../jest.config.js'),
+  noCache: true,
+  debug: true,
+}, [process.cwd()]);

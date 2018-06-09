@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@spacer-miner/docs",
+  "name": "@space-miner/docs",
   "version": "1.0.0",
   "description": "Tools for rendering markdown and lessons for Space Miner.",
   "license": "MIT",

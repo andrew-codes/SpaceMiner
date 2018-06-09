@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "../../node_modules/@space-miner/webpack/bin/build.js client/index.js",
+    "build": "webpack-dev client/index.js",
     "start": "node server/app.js"
   },
   "dependencies": {
