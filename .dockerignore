@@ -1,0 +1,9 @@
+**/node_modules
+.eslint*
+.git*
+.editorconfig
+.nvmrc
+.prettier*
+.travis.yml
+jest.config.jest
+**/dist

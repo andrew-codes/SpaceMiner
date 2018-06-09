@@ -1,0 +1,9 @@
+{
+  "name": "space-minder/web",
+  "script": "server/app.js",
+  "instances": "1",
+  "env_production": {
+    "PORT": "9000",
+    "NODE_ENV": "production"
+  }
+}
