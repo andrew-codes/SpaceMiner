@@ -1,5 +1,7 @@
 FROM keymetrics/pm2:8-alpine
 
+EXPOSE 80
+
 RUN mkdir -p /app/build
 RUN mkdir -p /app/artifacts
 RUN mkdir -p /app/deployment
