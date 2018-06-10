@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@space-miner/babel-config": "^1.0.0",
+    "babel-core": "^6.26.3",
     "babel-jest": "^23.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
