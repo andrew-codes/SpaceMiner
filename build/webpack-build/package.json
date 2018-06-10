@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@space-miner/webpack-build",
+  "description": "Webpack CLI for building Space Miner.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "run-webpack": "bin/build.js"
+  },
+  "dependencies": {
+    "@space-miner/webpack": "^1.0.0"
+  }
+}
