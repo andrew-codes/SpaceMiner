@@ -9,11 +9,11 @@
     "src"
   ],
   "bin": {
-    "run-webpack-dev": "bin/dev.js"
+    "run-webpack": "bin/build.js"
   },
   "main": "src/index.js",
   "dependencies": {
-    "@space-miner/babel-config": "^1.0.0",
+    "@space-miner/babel": "^1.0.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "copy-webpack-plugin": "^4.5.1",
