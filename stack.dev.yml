@@ -1,0 +1,49 @@
+version: "3.6"
+
+services:
+
+  web:
+    build: .
+    depends_on:
+      - db
+    networks:
+      - webnet
+    ports:
+      - "80:80"
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: example
+      DB_URL: mongo
+      DB_PORT: 27017
+    deploy:
+      replicas: 6
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: start-first
+
+  db:
+    image: mongo
+    networks:
+      - webnet
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - data-db:/data/db
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+networks:
+  webnet:
+
+volumes:
+  data-db:
