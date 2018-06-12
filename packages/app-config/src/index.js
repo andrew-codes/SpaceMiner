@@ -1,0 +1,19 @@
+const {
+  DB_PASSWORD,
+  DB_URL,
+  DB_USERNAME,
+  NODE_ENV,
+  PORT,
+} = process.env;
+
+export default function getConfig() {
+  return {
+    env: NODE_ENV,
+    db: {
+      password: DB_PASSWORD,
+      url: DB_URL,
+      username: DB_USERNAME,
+    },
+    port: PORT,
+  };
+};
