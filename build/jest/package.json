@@ -12,7 +12,7 @@
     "run-jest": "bin/jest.js"
   },
   "dependencies": {
-    "@space-miner/babel-config": "^1.0.0",
+    "@space-miner/babel": "^1.0.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.0.1",
     "enzyme": "^3.3.0",

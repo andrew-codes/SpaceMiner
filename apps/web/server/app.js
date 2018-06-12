@@ -1,13 +1,14 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const getAppConfig = require('@space-miner/app-config').default;
 const path = require('path');
 const Html = require('./Html');
 
-const env = process.env.NODE_ENV;
-const port = process.env.PORT;
+const config = getAppConfig();
 
 const app = new express();
-if (env === 'development') {
+
+if (config.env === 'development') {
   /* eslint-disable import/no-extraneous-dependencies */
   const createWebpackCompiler = require('@space-miner/webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -31,4 +32,4 @@ app.get('/*', (req, res) => {
   res.send(Html({ scripts: ['/dist/vendor.js', '/dist/main.js'] }))
 });
 
-app.listen(port, () => console.log(`App running on port ${port}`));
+app.listen(config.port, () => console.log(`App running on port ${config.port}`));

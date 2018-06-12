@@ -19,6 +19,8 @@
     "lint": "yarn run-eslint '**/*.js'",
     "test": "cross-env NODE_ENV=test yarn run-jest",
     "start": "cd apps/web && cross-env PORT=9000 NODE_ENV=development yarn start && cd ../../",
+    "build": "yarn build:web && yarn build:packages",
+    "build:packages": "yarn run-babel packages/* dist",
     "build:web": "cd apps/web && yarn build && cd ../../"
   },
   "workspaces": [

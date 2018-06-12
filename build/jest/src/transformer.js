@@ -1,3 +1,3 @@
-const babelConfig = require('@space-miner/babel-config');
+const babelConfig = require('@space-miner/babel');
 
 module.exports = require('babel-jest').createTransformer(babelConfig);
