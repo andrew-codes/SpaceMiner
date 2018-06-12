@@ -2,26 +2,18 @@ FROM keymetrics/pm2:8-alpine
 
 EXPOSE 80
 
-RUN mkdir -p /app/build
-RUN mkdir -p /app/artifacts
-RUN mkdir -p /app/deployment
+RUN mkdir -p /app
 
 # Build
-COPY . /app/build
-WORKDIR /app/build
+COPY . /app
+WORKDIR /app
 RUN yarn && yarn bootstrap
-RUN NODE_ENV=production yarn build:web
-RUN cp -r /app/build/apps/web/dist /app/artifacts
-RUN rm -rf /app/build
+RUN NODE_ENV=production yarn build
 
 # Prepare production deployment
-COPY . /app/deployment
-RUN cp -r /app/artifacts/dist /app/deployment/apps/web
-
-WORKDIR /app/deployment
+RUN find . -type d -name "node_modules" -delete
 
 # Production install
 RUN NODE_ENV=production yarn
 
-WORKDIR /app/deployment/apps/web
 ENTRYPOINT [ "pm2-runtime", "start", "pm2.json", "--env", "production" ]
