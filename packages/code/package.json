@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@space-miner/code",
   "version": "0.0.0",
   "description": "Components for rendering static code blocks.",

@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@space-miner/analytics",
   "version": "1.0.0",
   "description": "Capture UI interactions, state, and contextual data from components.",
