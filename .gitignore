@@ -23,4 +23,4 @@ coverage
 .vscode
 
 # Built code
-apps/web/dist
+dist/
