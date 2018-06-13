@@ -28,6 +28,9 @@ const babelConfig = {
 module.exports = (
   {
     entry,
+    publicPath,
+    host = '0.0.0.0',
+    port = 80,
     env = 'development',
     cwd = process.cwd(),
     noMinimize = false,
@@ -40,7 +43,7 @@ module.exports = (
       env === 'development'
         ? [
           'react-hot-loader/patch',
-          'webpack-hot-middleware/client',
+          `webpack-hot-middleware/client`,
           path.join(process.cwd(), entry),
         ]
         : path.join(cwd, entry),
@@ -54,7 +57,7 @@ module.exports = (
   output: {
     filename: '[name].js',
     path: path.resolve(cwd, 'dist'),
-    publicPath: '/',
+    publicPath: publicPath,
     library: 'App',
     libraryTarget: "umd",
 
