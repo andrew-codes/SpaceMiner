@@ -18,10 +18,11 @@
     "bootstrap": "yarn lerna bootstrap",
     "lint": "yarn run-eslint '**/*.js'",
     "test": "cross-env NODE_ENV=test yarn run-jest",
-    "start": "cd apps/web && cross-env PORT=9000 NODE_ENV=development yarn start && cd ../../",
-    "build": "yarn build:web && yarn build:packages",
-    "build:packages": "yarn run-babel packages/* dist",
-    "build:web": "cd apps/web && yarn build && cd ../../"
+    "start": "lerna run start --include @space-miner/web --include @space-miner/api --parallel",
+    "start:dev": "cross-env NODE_ENV=development WEB_PORT=9000 API_PORT=9001 lerna run start:dev --include @space-miner/web --include @space-miner/api --parallel",
+    "start:dev:api": "lerna run start:dev --include @space-miner/api",
+    "start:dev:web": "lerna run start:dev --include @space-miner/web",
+    "build": "lerna run build --ignore @space-miner/api"
   },
   "workspaces": [
     "build/*",

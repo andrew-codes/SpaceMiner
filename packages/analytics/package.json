@@ -9,6 +9,9 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "run-babel src/**/*.js src/*.js"
+  },
   "peerDependencies": {
     "react": "^16.3.2"
   },

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@space-miner/app-config",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Configuration data for Space Miner apps.",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -9,6 +9,9 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "run-babel src/**/*.js src/*.js"
+  },
   "dependencies": {
     "@space-miner/babel": "^1.0.0"
   }

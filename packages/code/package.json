@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@space-miner/code",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Components for rendering static code blocks.",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -9,6 +9,9 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "run-babel src/**/*.js src/*.js"
+  },
   "peerDependencies": {
     "react": "^16.3.2"
   },

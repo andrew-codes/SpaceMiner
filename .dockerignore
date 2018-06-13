@@ -5,5 +5,5 @@
 .nvmrc
 .prettier*
 .travis.yml
-jest.config.jest
 **/dist
+docker/

@@ -3,7 +3,6 @@ const {
   DB_URL,
   DB_USERNAME,
   NODE_ENV,
-  PORT,
 } = process.env;
 
 export default function getConfig() {
@@ -14,6 +13,5 @@ export default function getConfig() {
       url: DB_URL,
       username: DB_USERNAME,
     },
-    port: PORT,
   };
 };

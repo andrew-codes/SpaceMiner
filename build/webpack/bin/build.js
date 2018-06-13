@@ -2,7 +2,7 @@
 
 const createWebpackCompiler = require('../src');
 
-build()
+build()//'//
   .catch(error => process.exit(error));
 
 async function build() {

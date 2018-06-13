@@ -1,14 +1,12 @@
-const bodyParser = require('body-parser');
 const express = require('express');
-const getAppConfig = require('@space-miner/app-config').default;
 const path = require('path');
 const Html = require('./Html');
 
-const config = getAppConfig();
-
 const app = new express();
+const env = process.env.NODE_ENV;
+const port = process.env.WEB_PORT;
 
-if (config.env === 'development') {
+if (env === 'development') {
   /* eslint-disable import/no-extraneous-dependencies */
   const createWebpackCompiler = require('@space-miner/webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -19,17 +17,17 @@ if (config.env === 'development') {
   app.use(webpackDevMiddleware(compiler, {
     publicPath,
   }));
-  app.use(webpackHotMiddleware(compiler));
+  app.use(webpackHotMiddleware(compiler, {
+    publicPath,
+  }));
 }
 
 app.get('/dist/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', req.url));
 });
 
-app.use(bodyParser.json());
-
-app.get('/*', (req, res) => {
+app.get('/*', (req, res, next) => {
   res.send(Html({ scripts: ['/dist/vendor.js', '/dist/main.js'] }))
 });
 
-app.listen(config.port, () => console.log(`App running on port ${config.port}`));
+app.listen(port, () => console.log(`App running on port ${port}`));

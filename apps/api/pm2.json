@@ -1,5 +1,5 @@
 {
-  "name": "@space-minder/web",
+  "name": "@space-minder/api",
   "script": "server/app.js",
   "instances": "1"
 }
