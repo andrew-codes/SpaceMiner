@@ -21,6 +21,7 @@ services:
     image: andrewcodes/space-miner-web:latest
     depends_on:
       - api
+      - nginx-proxy
     networks:
       - webnet
     ports:
@@ -41,6 +42,7 @@ services:
     image: andrewcodes/space-miner-api:latest
     depends_on:
       - db
+      - nginx-proxy
     networks:
       - webnet
       - backend
