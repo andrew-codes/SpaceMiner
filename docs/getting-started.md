@@ -1,30 +1,25 @@
 # Getting Started
 
-## Before You Begin
+## Quick Start
 
 Ensure you have the following software installed:
 
-1. [git](https://git-scm.com/downloads)
-2. [node@^8.11.1](https://nodejs.org/en/)
-3. [yarn@^1.3.0](https://yarnpkg.com/lang/en/docs/install/)
+1. Install [git](https://git-scm.com/downloads)
+2. Install [docker](https://www.docker.com/community-edition#/download)
+3. `git clone git@github.com:andrew-codes/SpaceMiner.git` to clone repository
+4. `cd SpaceMiner` to change directory into root of project
+5. `docker-compose -f stack.dev.yml up` and visit [http://localhost](http://localhost)
 
-## Setup
+## Developing Locally
 
-1. `git clone git@github.com:andrew-codes/SpaceMiner.git` to clone repository
-2. `cd SpaceMiner` to change directory into root of project
-3. `yarn && yarn bootstrap` to install and bootstrap dependencies.
+Requires installing:
 
-## Running Site Locally
+1. [node@^8.11.1](https://nodejs.org/en/)
+2. [yarn@^1.3.0](https://yarnpkg.com/lang/en/docs/install/)
 
-1. Open the terminal and change into project's root directory; `cd SpaceMiner`
-2. Run `yarn start` in the terminal
-3. Open Chrome and visit [http://localhost:9000](http://localhost:9000)
-
-## Other Developer CLI Tasks
-
+`cd SpaceMinder` and then from CLI these tasks can be run:
 * `yarn lint`
 * `yarn test` will run all tests
-* `yarn lerna add --scope @space-miner/package-name dependency-to-add` (see below for details on managing dependencies)
 
 ## Managing Dependencies
 

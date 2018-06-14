@@ -2,12 +2,30 @@ version: "3.6"
 
 services:
 
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
   web:
     build:
       context: .
       dockerfile: docker/web.Dockerfile
       args:
         NODE_ENV: development
+    environment:
+      VIRTUAL_HOST: localhost
+      API_URL: api.localhost
     entrypoint:
       - yarn
       - start:dev
@@ -15,10 +33,11 @@ services:
       - .:/app
     depends_on:
       - api
+      - nginx-proxy
     networks:
       - webnet
     ports:
-      - "80:80"
+      - "9000:80"
     deploy:
       replicas: 6
       restart_policy:
@@ -40,13 +59,15 @@ services:
     volumes:
       - .:/app
     depends_on:
+      - nginx-proxy
       - db
     networks:
       - webnet
       - backend
     ports:
-      - "81:80"
+      - "9001:80"
     environment:
+      VIRTUAL_HOST: api.localhost
       DB_USERNAME: root
       DB_PASSWORD: example
       DB_URL: mongo
