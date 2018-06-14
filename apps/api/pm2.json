@@ -1,5 +1,9 @@
 {
   "name": "@space-minder/api",
   "script": "server/app.js",
-  "instances": "1"
+  "instances": "1",
+  "env_production": {
+    "API_PORT": "80",
+    "NODE_ENV": "production"
+  }
 }

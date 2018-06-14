@@ -19,4 +19,4 @@ RUN find . -type d -name "node_modules" -delete
 RUN NODE_ENV=$NODE_ENV yarn
 
 WORKDIR /app/apps/web
-CMD ["pm2-runtime", "start", "pm2.json"]
+CMD ["pm2-runtime", "start", "pm2.json", "--env", "production"]
