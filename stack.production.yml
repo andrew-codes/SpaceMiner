@@ -2,6 +2,15 @@ version: "3.6"
 
 services:
 
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   web:
     image: andrewcodes/space-miner-web:latest
     depends_on:
@@ -9,9 +18,10 @@ services:
     networks:
       - webnet
     ports:
-      - "80:80"
+      - "9000:80"
     environment:
       NODE_ENV: production
+      VIRTUAL_HOST: spaceminer.andrew.codes
     deploy:
       replicas: 6
       restart_policy:
@@ -29,8 +39,9 @@ services:
       - webnet
       - backend
     ports:
-      - "81:80"
+      - "9001:80"
     environment:
+      VIRTUAL_HOST: spaceminer-api.andrew.codes
       NODE_ENV: production
       DB_USERNAME: $DB_USERNAME
       DB_PASSWORD: $DB_PASSWORD
