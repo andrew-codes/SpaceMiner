@@ -10,6 +10,12 @@ services:
       - webnet
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   web:
     image: andrewcodes/space-miner-web:latest
