@@ -10,9 +10,9 @@ const config = {
   modulePathIgnorePatterns: ['./node_modules'],
   transformIgnorePatterns: ['\\/node_modules\\/(?!@space-miner)'],
   resolver: require.resolve('./src/resolver.js'),
-  transform: {
-    '^.+\\.js?$': require.resolve('./src/transformer.js'),
-  },
+  // transform: {
+  //   '^.+\\.js?$': require.resolve('./src/transformer.js'),
+  // },
   moduleFileExtensions: ['js'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/build/jest/src/fileMock.js',

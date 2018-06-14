@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-babel src/**/*.js src/*.js"
+    "build": "babel src --out-dir dist --ignore __tests__"
   },
   "peerDependencies": {
     "react": "^16.3.2"
@@ -25,6 +25,7 @@
     "react-virtualized": "^9.19.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "enzyme": "^3.3.0"
   }
 }

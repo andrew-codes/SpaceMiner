@@ -10,9 +10,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-babel src/**/*.js src/*.js"
+    "build": "babel src --out-dir dist --ignore __tests__"
   },
   "dependencies": {
-    "@space-miner/babel": "^1.0.0"
+    "babel-cli": "^6.26.0"
   }
 }

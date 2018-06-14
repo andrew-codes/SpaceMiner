@@ -5,25 +5,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const babelConfig = {
-  presets: [
-    'babel-preset-env',
-    'babel-preset-react',
-  ],
-  plugins: [
-    'babel-plugin-dynamic-import-webpack',
-    'babel-plugin-transform-class-properties',
-    'babel-plugin-transform-object-rest-spread',
-    'babel-plugin-emotion',
-  ],
-  env: {
-    development: {
-      plugins: [
-        'babel-plugin-react-hot-loader/babel',
-      ],
-    },
-  },
-};
 
 module.exports = (
   {
@@ -76,7 +57,6 @@ module.exports = (
         loader: require.resolve('babel-loader'),
         options: {
           cacheDirectory: true,
-          ...babelConfig,
         },
       },
       {
