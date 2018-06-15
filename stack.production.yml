@@ -53,8 +53,7 @@ services:
       NODE_ENV: production
       DB_USERNAME: $DB_USERNAME
       DB_PASSWORD: $DB_PASSWORD
-      DB_URL: mongo
-      DB_PORT: 27017
+      DB_HOST: mongodb
     deploy:
       replicas: 6
       restart_policy:
@@ -68,11 +67,12 @@ services:
     image: mongo
     networks:
       - backend
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: $DB_USERNAME
       MONGO_INITDB_ROOT_PASSWORD: $DB_PASSWORD
+    entrypoint:
+      - mongod
+      - --bind_ip_all
     volumes:
       - data-db:/data/db
     deploy:
