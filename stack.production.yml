@@ -37,7 +37,7 @@ services:
       update_config:
         parallelism: 2
         delay: 10s
-        order: start-first
+        order: stop-first
 
   api:
     image: andrewcodes/space-miner-api:latest
@@ -63,7 +63,7 @@ services:
       update_config:
         parallelism: 2
         delay: 10s
-        order: start-first
+        order: stop-first
 
   db:
     image: mongo
