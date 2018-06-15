@@ -25,7 +25,7 @@ services:
         NODE_ENV: development
     environment:
       VIRTUAL_HOST: localhost
-      API_URL: api.localhost
+      API_HOST: api.localhost
     entrypoint:
       - yarn
       - start:dev
@@ -38,14 +38,6 @@ services:
       - webnet
     ports:
       - "9000:80"
-    deploy:
-      replicas: 6
-      restart_policy:
-        condition: on-failure
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: start-first
 
   api:
     build:
@@ -60,48 +52,47 @@ services:
       - .:/app
     depends_on:
       - nginx-proxy
-      - db
+      - mongodb
     networks:
       - webnet
-      - backend
+      - backend-net
     ports:
       - "9001:80"
     environment:
       VIRTUAL_HOST: api.localhost
       DB_USERNAME: root
       DB_PASSWORD: example
-      DB_URL: mongo
-      DB_PORT: 27017
-    deploy:
-      replicas: 6
-      restart_policy:
-        condition: on-failure
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: start-first
+      DB_HOST: mongodb
 
-  db:
+  mongodb:
     image: mongo
     networks:
-      - backend
-    ports:
-      - "27017:27017"
+      - backend-net
+    hostname: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - data-db:/data/db
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-      restart_policy:
-        condition: on-failure
+    entrypoint:
+      - mongod
+      - --bind_ip_all
+
+  mongodb-admin:
+    image: mrvautin/adminmongo
+    depends_on:
+      - mongodb
+    ports:
+      - "9002:1234"
+    networks:
+      - webnet
+      - backend-net
+    environment:
+      VIRTUAL_HOST: dba.localhost
 
 networks:
   webnet:
-  backend:
+  backend-net:
 
 volumes:
   data-db:
