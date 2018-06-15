@@ -1,17 +1,19 @@
 const {
+  API_PORT,
   DB_PASSWORD,
-  DB_URL,
+  DB_HOST,
   DB_USERNAME,
   NODE_ENV,
+  WEB_PORT,
 } = process.env;
 
-export default function getConfig() {
-  return {
-    env: NODE_ENV,
-    db: {
-      password: DB_PASSWORD,
-      url: DB_URL,
-      username: DB_USERNAME,
-    },
-  };
+export default {
+  apiPort: API_PORT,
+  db: {
+    password: DB_PASSWORD,
+    host: DB_HOST,
+    username: DB_USERNAME,
+  },
+  env: NODE_ENV,
+  webPort: WEB_PORT,
 };

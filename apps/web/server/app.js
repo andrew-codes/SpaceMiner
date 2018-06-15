@@ -1,12 +1,11 @@
+const config = require('@space-miner/app-config');
 const express = require('express');
 const path = require('path');
 const Html = require('./Html');
 
 const app = new express();
-const env = process.env.NODE_ENV;
-const port = process.env.WEB_PORT;
 
-if (env === 'development') {
+if (config.env === 'development') {
   /* eslint-disable import/no-extraneous-dependencies */
   const createWebpackCompiler = require('@space-miner/webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -28,4 +27,4 @@ app.get('/*', (req, res, next) => {
   res.send(Html({ scripts: ['/dist/vendor.js', '/dist/main.js'] }))
 });
 
-app.listen(port, () => console.log(`App running on port ${port}`));
+app.listen(config.webPort, () => console.log(`App running on port ${config.webPort}`));
