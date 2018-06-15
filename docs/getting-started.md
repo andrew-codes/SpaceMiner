@@ -12,14 +12,14 @@ Ensure you have the following software installed:
 
 ## Developing Locally
 
-Requires installing:
+It is recommended to use the above configuration to run locally as it also includes mongo without needing to install/configure it lcoally. However, in order to manage or add new dependencies to packages, follow these steps:
 
-1. [node@^8.11.1](https://nodejs.org/en/)
-2. [yarn@^1.3.0](https://yarnpkg.com/lang/en/docs/install/)
-
-`cd SpaceMinder` and then from CLI these tasks can be run:
-* `yarn lint`
-* `yarn test` will run all tests
+1. Install [node@^8.11.1](https://nodejs.org/en/)
+2. Install [yarn@^1.3.0](https://yarnpkg.com/lang/en/docs/install/)
+3. `cd SpaceMinder` and then from CLI these tasks can be run
+4. `yarn && yarn bootstrap` to install/initialize dependencies in project
+5. (Optional) `yarn lint` will lint all source files
+6. (Optional) `yarn test` will run all tests
 
 ## Managing Dependencies
 
@@ -27,6 +27,6 @@ Packages are managed using [lerna](https://lernajs.io/). Each package has its ow
 
 > **Note**: If you run into trouble after installing a new dependency, try running `yarn && yarn bootstrap`.
 
-* **Adding** a new dependency, use `yarn lerna add --scope @space-miner/package-name dependency-name`
-* For **dev dependencies**, add the `--dev` CLI option `yarn lerna add --dev --scope @space-miner/package-name dependency-name`
-* **Removing** dependencies requires deleting the item from the package's `package.json` and re-running `yarn bootstrap` in the project root.
+- **Adding** a new dependency, use `yarn lerna add --scope @space-miner/package-name dependency-name`
+- For **dev dependencies**, add the `--dev` CLI option `yarn lerna add --dev --scope @space-miner/package-name dependency-name`
+- **Removing** dependencies requires deleting the item from the package's `package.json` and re-running `yarn && yarn bootstrap` in the project root.
