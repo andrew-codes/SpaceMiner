@@ -16,7 +16,7 @@ RUN NODE_ENV=${NODE_ENV} yarn build
 RUN find . -type d -name "node_modules" -delete
 
 # Production install
-RUN NODE_ENV=$NODE_ENV yarn
+RUN NODE_ENV=${NODE_ENV} yarn
 
 WORKDIR /app/apps/web
 CMD ["pm2-runtime", "start", "pm2.json", "--env", "production"]

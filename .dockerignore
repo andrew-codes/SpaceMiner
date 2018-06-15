@@ -4,6 +4,7 @@
 .editorconfig
 .nvmrc
 .prettier*
-.travis.yml
 **/dist
 docker/
+stack.dev.yml
+stack.production.yml

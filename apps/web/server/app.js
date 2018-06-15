@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const Html = require('./Html');
 
+const port = process.env.WEB_PORT;
 const app = new express();
 
 if (config.env === 'development') {
@@ -27,4 +28,4 @@ app.get('/*', (req, res, next) => {
   res.send(Html({ scripts: ['/dist/vendor.js', '/dist/main.js'] }))
 });
 
-app.listen(config.webPort, () => console.log(`App running on port ${config.webPort}`));
+app.listen(port, () => console.log(`App running on port ${port}`));
