@@ -6,7 +6,7 @@ export default Home;
 function Home() {
   return (
     <Page>
-      <h1>Hello World!</h1>
+      <h1>Hello World, I am updated!</h1>
     </Page>
   );
 }
