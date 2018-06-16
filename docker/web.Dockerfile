@@ -1,8 +1,6 @@
-FROM keymetrics/pm2:8-alpine
+FROM node:10-alpine
 
 EXPOSE 80
-
-ARG NODE_ENV=production
 
 RUN mkdir -p /app
 
@@ -10,13 +8,15 @@ RUN mkdir -p /app
 COPY . /app
 WORKDIR /app
 RUN yarn && yarn bootstrap
-RUN NODE_ENV=${NODE_ENV} yarn build
+RUN NODE_ENV=production yarn build
 
 # Prepare production deployment
 RUN find . -type d -name "node_modules" -delete
 
 # Production install
-RUN NODE_ENV=${NODE_ENV} yarn
+RUN NODE_ENV=production yarn
 
 WORKDIR /app/apps/web
-CMD ["pm2-runtime", "start", "pm2.json", "--env", "production"]
+ENV NODE_ENV=production
+ENV WEB_PORT=80
+CMD ["yarn", "start"]
