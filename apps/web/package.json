@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "build": "run-webpack client/index.js",
-    "prestart": "yarn build",
     "prestart:dev": "yarn build",
     "start": "node server/app.js",
     "start:dev": "cross-env NODE_ENV=development WEB_PORT=80 node server/app.js"
