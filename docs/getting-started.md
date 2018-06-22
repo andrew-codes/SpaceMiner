@@ -8,7 +8,6 @@ Ensure you have the following software installed:
 2. Install [docker](https://www.docker.com/community-edition#/download)
 3. `git clone git@github.com:andrew-codes/SpaceMiner.git` to clone repository
 4. `cd SpaceMiner` to change directory into root of project
-5. `docker-compose -f stack.dev.yml build` to build images
 6. `docker-compose -f stack.dev.yml up` and visit [http://localhost](http://localhost)
 7. (optional) API is located at [http://api.localhost](http://api.localhost)
 8. (optional) Database admin tool located at  [http://dba.localhost](http://dba.localhost)
