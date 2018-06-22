@@ -17,21 +17,29 @@ services:
       restart_policy:
         condition: on-failure
 
-  web:
+  deps:
     build:
       context: .
-      dockerfile: docker/web.Dockerfile
+      dockerfile: docker/build.Dockerfile
       args:
         NODE_ENV: development
+    working_dir: /app
+    volumes:
+      - .:/app
+
+  web:
+    image: node:10-alpine
+    working_dir: /app/apps/web
     environment:
       VIRTUAL_HOST: localhost
       API_HOST: api.localhost
+    volumes:
+      - .:/app
     entrypoint:
       - yarn
       - start:dev
-    volumes:
-      - .:/app
     depends_on:
+      - deps
       - api
       - nginx-proxy
     networks:
@@ -40,19 +48,17 @@ services:
       - "9000:80"
 
   api:
-    build:
-      context: .
-      dockerfile: docker/api.Dockerfile
-      args:
-        NODE_ENV: development
-    entrypoint:
-      - yarn
-      - start:dev
+    image: node:10-alpine
+    working_dir: /app/apps/api
     volumes:
       - .:/app
     depends_on:
+      - deps
       - nginx-proxy
       - mongodb
+    entrypoint:
+      - yarn
+      - start:dev
     networks:
       - webnet
       - backend-net

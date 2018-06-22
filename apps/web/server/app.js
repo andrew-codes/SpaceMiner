@@ -1,12 +1,12 @@
-const config = require('@space-miner/app-config');
 const express = require('express');
 const path = require('path');
 const Html = require('./Html');
 
 const port = process.env.WEB_PORT;
+const env = process.env.NODE_ENV;
 const app = new express();
 
-if (config.env === 'development') {
+if (env === 'development') {
   /* eslint-disable import/no-extraneous-dependencies */
   const createWebpackCompiler = require('@space-miner/webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');

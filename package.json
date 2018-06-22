@@ -22,7 +22,7 @@
     "start:dev": "cross-env NODE_ENV=development WEB_PORT=9000 API_PORT=9001 lerna run start:dev --include @space-miner/web --include @space-miner/api --parallel",
     "start:dev:api": "lerna run start:dev --include @space-miner/api",
     "start:dev:web": "lerna run start:dev --include @space-miner/web",
-    "build": "lerna run build --ignore @space-miner/api"
+    "build": "lerna run build"
   },
   "workspaces": [
     "build/*",
