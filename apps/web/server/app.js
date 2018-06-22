@@ -4,6 +4,8 @@ const Html = require('./Html');
 
 const port = process.env.WEB_PORT;
 const env = process.env.NODE_ENV;
+const isWindows = process.env.COMPOSE_CONVERT_WINDOWS_PATHS === '1';
+
 const app = new express();
 
 if (env === 'development') {
@@ -13,9 +15,15 @@ if (env === 'development') {
   const webpackHotMiddleware = require('webpack-hot-middleware');
   /* eslint-enable import/no-extraneous-dependencies */
   const publicPath = '/dist/';
+  const poll = isWindows ? 1000 : false;
+  const watchOptions = {
+    poll,
+    aggregateTimeout: 300,
+  };
   const compiler = createWebpackCompiler({ cwd: __dirname, entry: path.join('client', 'index.js'), publicPath });
   app.use(webpackDevMiddleware(compiler, {
     publicPath,
+    watchOptions,
   }));
   app.use(webpackHotMiddleware(compiler));
 }

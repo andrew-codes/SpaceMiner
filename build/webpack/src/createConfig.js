@@ -10,8 +10,6 @@ module.exports = (
   {
     entry,
     publicPath,
-    host = '0.0.0.0',
-    port = 80,
     env = 'development',
     cwd = process.cwd(),
     noMinimize = false,

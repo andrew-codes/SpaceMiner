@@ -5,17 +5,11 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy:latest
     ports:
-      - "80:80"
+      - "${PORT-80}:80"
     networks:
       - webnet
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-      restart_policy:
-        condition: on-failure
 
   deps:
     build:
@@ -33,8 +27,9 @@ services:
     environment:
       VIRTUAL_HOST: localhost
       API_HOST: api.localhost
+      COMPOSE_CONVERT_WINDOWS_PATHS: $COMPOSE_CONVERT_WINDOWS_PATHS
     volumes:
-      - .:/app
+      - $PWD:/app
     entrypoint:
       - yarn
       - start:dev
@@ -51,7 +46,7 @@ services:
     image: node:10-alpine
     working_dir: /app/apps/api
     volumes:
-      - .:/app
+      - $PWD:/app
     depends_on:
       - deps
       - nginx-proxy

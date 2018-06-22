@@ -9,9 +9,12 @@ Ensure you have the following software installed:
 3. `git clone git@github.com:andrew-codes/SpaceMiner.git` to clone repository
 4. `cd SpaceMiner` to change directory into root of project
 6. `docker-compose -f stack.dev.yml up` and visit [http://localhost](http://localhost)
-7. (optional) API is located at [http://api.localhost](http://api.localhost)
-8. (optional) Database admin tool located at  [http://dba.localhost](http://dba.localhost)
+    - Windows users: environment variable, `COMPOSE_CONVERT_WINDOWS_PATHS` must be set to `1`. Example in git bash on Windows: `COMPOSE_CONVERT_WINDOWS_PATHS=1 docker-compose -f stack.dev.yml up`
+1. (optional) API is located at [http://api.localhost](http://api.localhost)
+2. (optional) Database admin tool located at  [http://dba.localhost](http://dba.localhost)
     - use connection string (mongodb://root:example@mongodb or mongodb://mongodb)
+
+> NOTE: port 80 is the default port SpaceMiner runs on in development. However, in case this port is not available, a `PORT` environment variable enables running on a different port; example: `PORT=3000 docker-compose -f stack.dev.yml up`.
 
 See [troubleshooting guide](./troubleshooting-guide.md) for help with issues.
 
