@@ -15,15 +15,14 @@ if (env === 'development') {
   const webpackHotMiddleware = require('webpack-hot-middleware');
   /* eslint-enable import/no-extraneous-dependencies */
   const publicPath = '/dist/';
-  const poll = isWindows ? 1000 : false;
-  const watchOptions = {
-    poll,
-    aggregateTimeout: 300,
-  };
   const compiler = createWebpackCompiler({ cwd: __dirname, entry: path.join('client', 'index.js'), publicPath });
   app.use(webpackDevMiddleware(compiler, {
     publicPath,
-    watchOptions,
+    watch: true,
+    watchOptions: {
+      poll: true,
+      aggregateTimeout: 300,
+    },
   }));
   app.use(webpackHotMiddleware(compiler));
 }
