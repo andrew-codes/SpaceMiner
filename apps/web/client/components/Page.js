@@ -1,20 +1,33 @@
+import React from 'react';
 import styled from 'react-emotion';
+import { withStyles, withTheme } from '@material-ui/core/styles';
 
-const containerWidth = {
-  small: '480px',
-  medium: '640px',
-  large: '980px',
-  xlarge: '1660px',
-};
+export default withStyles(styles)(Page);
 
-const Page = styled('main') `
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  max-width: ${p =>
-    containerWidth[p.width] ? containerWidth[p.width] : containerWidth.medium};
-  margin: 2rem auto;
-  padding: 0 2rem;
+function styles(theme) {
+  return {
+    toolbar: theme.mixins.toolbar,
+  };
+}
+
+const ToolbarSpacer = withTheme()(styled('div')({
+}, ({ theme }) => theme.mixins.toolbar));
+
+const Main = styled.main`
+    flex-grow: 1;
+    min-width: 0;
 `;
+const Content = withTheme()(styled.div`
+padding: ${p => p.theme.spacing.unit * 3};
+`);
 
-export default Page;
+function Page({ children, classes }) {
+  return (
+    <Main>
+      <ToolbarSpacer />
+      <Content>
+        {children}
+      </Content>
+    </Main>
+  );
+}

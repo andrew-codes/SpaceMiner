@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@space-miner/media-query",
+  "version": "1.0.0",
+  "description": "Utilities for using media queries.",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "pkg:main": "./src/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir dist --ignore __tests__"
+  },
+  "dependencies": {
+    "emotion": "^9.1.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}

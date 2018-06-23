@@ -2,14 +2,16 @@ import React from 'react';
 import styled from 'react-emotion';
 import * as PropTypes from 'prop-types';
 
-const ErrorSummaryBlock = styled('blockquote') `
+export default Error;
+
+const ErrorSummaryBlock = styled('blockquote')`
 background: pink;
 border: 1px solid darkred;
 color: darkred;
 margin: 2rem;
 `;
 
-export default function Error({ message, stack }) {
+function Error({ message, stack }) {
   return (
     <ErrorSummaryBlock>
       <strong>Error</strong>

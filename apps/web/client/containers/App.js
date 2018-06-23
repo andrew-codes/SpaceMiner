@@ -1,7 +1,12 @@
+import createResponsiveMQ from '@space-miner/media-query';
+import Drawer from '@material-ui/core/Drawer';
 import React, { Component } from 'react';
 import styled, { injectGlobal } from 'react-emotion';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
+import { withStyles, withTheme } from '@material-ui/core/styles';
+import AppBar from '../components/AppBar';
+import background from '../../assets/space-miner-background.jpg';
 import Error from '../components/Error';
 import FourOhFourPage from '../pages/FourOhFourPage';
 import Home from '../pages/Home';
@@ -22,23 +27,52 @@ class RouteBoundary extends Component {
   }
 }
 
-const AppContent = styled.div`
-  flex: 1 1 auto;
-`;
 injectGlobal`
 body {
-  background: lightgray;
+  background-image: url('${background}');
+  background-size: cover;
   margin: 0;
   padding: 0;
 }
 `;
 
-const App = () => (
+const AppContent = styled.div`
+  color: #fff;
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+`;
+
+const ToolbarSpacer = withTheme()(styled('div')({
+}, ({ theme }) => theme.mixins.toolbar));
+
+const styles = theme => {
+  return ({
+    drawerPaper: {
+      position: 'relative',
+      width: 240,
+      background: 'rgba(255, 255, 255, 0.45)',
+    },
+  });
+}
+
+const App = ({ classes }) => (
   <BrowserRouter>
     <Switch>
       <Route>
         <RouteBoundary>
           <AppContent>
+            <AppBar />
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <ToolbarSpacer />
+            </Drawer>
             <Switch>
               <Route exact path="/" component={Home} />
               <Route component={FourOhFourPage} />
@@ -46,8 +80,8 @@ const App = () => (
           </AppContent>
         </RouteBoundary>
       </Route>
-    </Switch>
-  </BrowserRouter>
+    </Switch >
+  </BrowserRouter >
 );
 
-export default hot(module)(App);
+export default hot(module)(withStyles(styles)(App));
