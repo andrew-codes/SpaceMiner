@@ -3,46 +3,39 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
+import styled from 'react-emotion';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import * as PropTypes from 'prop-types';
+import { withTheme } from '@material-ui/core/styles';
 
-const drawerWidth = 240;
+export default SimpleAppBar;
 
-const styles = theme => ({
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  flex: {
-    flex: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-});
+const MenuButton = styled(IconButton)`
+  margin-left: -12px;
+  margin-right: 20px;
+`;
 
-function SimpleAppBar(props) {
-  const { classes } = props;
+const SiteAppBar = withTheme()(styled(AppBar)`
+  background: rgba(0,0,0,0.5);
+  z-index: ${p => p.theme.zIndex.drawer + 1};
+`);
 
+const SiteTitle = styled(Typography)`
+  flex: 1;
+`;
+
+function SimpleAppBar() {
   return (
-    <AppBar position="absolute" className={classes.appBar}>
+    <SiteAppBar position="absolute">
       <Toolbar>
-        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+        <MenuButton color="inherit" aria-label="Menu">
           <MenuIcon />
-        </IconButton>
-        <Typography variant="title" color="inherit" className={classes.flex}>
+        </MenuButton>
+        <SiteTitle variant="title" color="inherit">
           Space Miner
-          </Typography>
+        </SiteTitle>
         <Button color="inherit">Login</Button>
       </Toolbar>
-    </AppBar>
+    </SiteAppBar>
   );
 }
-
-SimpleAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(SimpleAppBar);

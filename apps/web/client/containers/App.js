@@ -48,15 +48,13 @@ const AppContent = styled.div`
 const ToolbarSpacer = withTheme()(styled('div')({
 }, ({ theme }) => theme.mixins.toolbar));
 
-const styles = theme => {
-  return ({
-    drawerPaper: {
-      position: 'relative',
-      width: 240,
-      background: 'rgba(255, 255, 255, 0.45)',
-    },
-  });
-}
+const styles = {
+  drawerPaper: {
+    position: 'relative',
+    width: 240,
+    background: 'rgba(0, 0, 0, 0.5)',
+  },
+};
 
 const App = ({ classes }) => (
   <BrowserRouter>
