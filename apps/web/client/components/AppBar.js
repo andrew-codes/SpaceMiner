@@ -16,7 +16,7 @@ const MenuButton = styled(IconButton)`
 `;
 
 const SiteAppBar = withTheme()(styled(AppBar)`
-  background: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.5);
   z-index: ${p => p.theme.zIndex.drawer + 1};
 `);
 
