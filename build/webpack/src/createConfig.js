@@ -71,7 +71,6 @@ module.exports = (
 });
 function plugins(
   {
-    cwd,
     env,
     noMinimize,
     report,

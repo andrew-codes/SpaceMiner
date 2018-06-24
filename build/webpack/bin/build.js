@@ -2,12 +2,15 @@
 
 const createWebpackCompiler = require('../src');
 
-build()//'//
-  .catch(error => process.exit(error));
+build()
+  .catch(error => {
+    console.error(error);
+    process.exit(1)
+  });
 
 async function build() {
   const [entry] = process.argv.slice(2);
-  const env = 'production';
+  const env = process.env.NODE_ENV || 'production';
 
   const compiler = createWebpackCompiler({
     entry,
@@ -21,6 +24,7 @@ async function build() {
         reject(error);
         return;
       }
+
       resolve(stats);
     })
   });
