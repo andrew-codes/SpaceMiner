@@ -5,6 +5,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "clean": "rm -rf dist",
+    "prebuild": "yarn clean",
     "build": "run-webpack client/index.js",
     "start": "node server/app.js",
     "start:dev": "cross-env NODE_ENV=development WEB_PORT=80 node server/app.js"
