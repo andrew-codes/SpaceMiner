@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (
   {
@@ -41,7 +40,7 @@ module.exports = (
     libraryTarget: "umd",
 
   },
-  devtool: env === 'production' ? false : 'cheap-module-source-map',
+  devtool: env === 'production' ? false : 'eval-source-map',
   module: {
     rules: [
       {
@@ -81,11 +80,6 @@ function plugins(
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': `"${env}"`,
     }),
-    new CopyWebpackPlugin([
-      { from: path.join(process.cwd(), '..', '**', 'assets/**/*'), to: path.join(process.cwd(), 'dist', 'assets'), flatten: true, },
-    ], {
-        debug: env === 'development',
-      }),
   ];
 
   if (report) {
