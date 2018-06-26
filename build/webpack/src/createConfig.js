@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
+const HappyPack = require('happypack');
 
 module.exports = (
   {
@@ -40,7 +41,7 @@ module.exports = (
     libraryTarget: "umd",
 
   },
-  devtool: env === 'production' ? false : 'eval-source-map',
+  devtool: env === 'production' ? false : 'cheap-module-eval-source-map',
   module: {
     rules: [
       {
@@ -51,10 +52,7 @@ module.exports = (
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: require.resolve('babel-loader'),
-        options: {
-          cacheDirectory: true,
-        },
+        loader: require.resolve('happypack/loader'),
       },
       {
         test: /\.(gif|jpe?g|png|ico)$/,
@@ -79,6 +77,16 @@ function plugins(
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': `"${env}"`,
+    }),
+    new HappyPack({
+      loaders: [
+        {
+          loader: require.resolve('babel-loader'),
+          options: {
+            cacheDirectory: true,
+          },
+        },
+      ],
     }),
   ];
 

@@ -16,6 +16,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "file-loader": "^1.1.11",
+    "happypack": "^5.0.0",
     "raw-loader": "^0.5.1",
     "react-hot-loader": "^4.2.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
