@@ -1,11 +1,11 @@
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import cn from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import noop from 'lodash/fp';
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -61,23 +61,23 @@ const ToolbarSpacer = withTheme()(styled('div')({
 
 const MenuButton = styled(IconButton)`
   margin-right: 20px;
-  display: ${p => p.isVisible === 'none' ? 'none': null};
-  visibility: ${p => p.isVisible ? 'visible': 'hidden'};
+  display: ${p => p.isVisible === 'none' ? 'none' : null};
+  visibility: ${p => p.isVisible ? 'visible' : 'hidden'};
 `;
 
 const BackButton = styled(IconButton)`
   color: #fff;
-  display: ${p => p.isVisible === 'none' ? 'none': null};
-  visibility: ${p => p.isVisible ? 'visible': 'hidden'};
+  display: ${p => p.isVisible === 'none' ? 'none' : null};
+  visibility: ${p => p.isVisible ? 'visible' : 'hidden'};
 `;
 
 const SiteAppBar = withTheme()(styled(AppBar)`
   background-color: rgba(0,0,0,0.5);
   z-index: ${p => p.theme.zIndex.drawer + 1};
   transition: ${p => p.theme.transitions.create(['width', 'margin'], {
-      easing: p.theme.transitions.easing.sharp,
-      duration: p.theme.transitions.duration.leavingScreen,
-    })}
+    easing: p.theme.transitions.easing.sharp,
+    duration: p.theme.transitions.duration.leavingScreen,
+  })}
 `);
 
 const SiteTitle = styled(Typography)`
@@ -91,6 +91,7 @@ class Navigation extends Component {
 
   render() {
     const {
+      renderActions,
       classes,
       theme,
     } = this.props;
@@ -104,10 +105,10 @@ class Navigation extends Component {
           className={cn(classes.toolbar, open && classes.toolbarShift)}
           position="absolute"
         >
-          <Toolbar disableGutters={!open} >
+          <Toolbar disableGutters={!open}>
             <MenuButton
               aria-label="open navigation drawer"
-              color="inherit" 
+              color="inherit"
               onClick={this.handleDrawerOpen}
               isVisible={open ? 'none' : true}
             >
@@ -116,7 +117,7 @@ class Navigation extends Component {
             <SiteTitle variant="title" color="inherit">
               Space Miner
             </SiteTitle>
-            <Button color="inherit">Login</Button>
+            {renderActions({isOpen: open})}
           </Toolbar>
         </SiteAppBar>
         <Drawer
@@ -127,12 +128,12 @@ class Navigation extends Component {
           variant="permanent"
         >
           <ToolbarSpacer>
-              <BackButton
-                isVisible={open}
-                onClick={this.handleDrawerClose}
-              >
-                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-              </BackButton>
+            <BackButton
+              isVisible={open}
+              onClick={this.handleDrawerClose}
+            >
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </BackButton>
           </ToolbarSpacer>
         </Drawer>
       </React.Fragment>
@@ -142,5 +143,8 @@ class Navigation extends Component {
   handleDrawerOpen = evt => this.setState({ open: true });
   handleDrawerClose = evt => this.setState({ open: false });
 }
+Navigation.defaultProps = {
+  renderActions: noop,
+}
 
-export default withStyles(styles, {withTheme: true})(Navigation);
+export default withStyles(styles, { withTheme: true })(Navigation);

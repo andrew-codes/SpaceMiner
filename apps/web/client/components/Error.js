@@ -9,6 +9,7 @@ background: pink;
 border: 1px solid darkred;
 color: darkred;
 margin: 2rem;
+padding: 2rem;
 `;
 
 function Error({ message, stack }) {
