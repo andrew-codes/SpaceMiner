@@ -19,7 +19,7 @@
     "lint": "yarn run-eslint '**/*.js'",
     "test": "cross-env NODE_ENV=test yarn run-jest",
     "start": "lerna run start --include @space-miner/web --include @space-miner/api --parallel",
-    "start:dev": "cross-env NODE_ENV=development WEB_PORT=9000 API_PORT=9001 lerna run start:dev --include @space-miner/web --include @space-miner/api --parallel",
+    "start:dev": "docker-compose -f stack.dev.yml up",
     "start:dev:api": "lerna run start:dev --include @space-miner/api",
     "start:dev:web": "lerna run start:dev --include @space-miner/web",
     "build": "lerna run build"
