@@ -35,4 +35,5 @@ app.get('/*', (req, res, next) => {
   res.send(Html({ scripts: ['/dist/vendor.js', '/dist/main.js'] }))
 });
 
-app.listen(port, () => console.log(`App running on port ${port}`));
+app.listen(80, () => console.log(`App running on port ${80}`));
+app.listen(443, () => console.log(`App running on port ${443}`));

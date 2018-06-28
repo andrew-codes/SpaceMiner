@@ -4,12 +4,37 @@ services:
 
   nginx-proxy:
     image: jwilder/nginx-proxy:latest
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - webnet
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
+      - /usr/share/nginx/html:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_PROTO=https
+      - VIRTUAL_PORT=443
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+  ssl:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /etc/nginx/certs:/etc/nginx/certs:rw
+      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     deploy:
       placement:
         constraints:
@@ -21,15 +46,18 @@ services:
     image: andrewcodes/space-miner-web:latest
     depends_on:
       - api
-      - nginx-proxy
+      - ssl
     networks:
       - webnet
     ports:
       - "9000:80"
+      - "9001:443"
     environment:
       WEB_PORT: 80
       NODE_ENV: production
       VIRTUAL_HOST: spaceminer.andrew.codes
+      LETSENCRYPT_HOST: spaceminer.andrew.codes
+      LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL
     deploy:
       replicas: 2
       restart_policy:
@@ -43,12 +71,13 @@ services:
     image: andrewcodes/space-miner-api:latest
     depends_on:
       - db
-      - nginx-proxy
+      - ssl
     networks:
       - webnet
       - backend
     ports:
-      - "9001:80"
+      - "9002:80"
+      - "9003:443"
     environment:
       NODE_ENV: production
       VIRTUAL_HOST: spaceminer-api.andrew.codes
@@ -56,6 +85,8 @@ services:
       DB_USERNAME: $DB_USERNAME
       DB_PASSWORD: $DB_PASSWORD
       DB_HOST: mongodb
+      LETSENCRYPT_HOST: spaceminer-api.andrew.codes
+      LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL
     deploy:
       replicas: 2
       restart_policy:

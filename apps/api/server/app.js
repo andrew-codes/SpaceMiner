@@ -8,4 +8,5 @@ app.use(bodyParser.json());
 app.get('/*', (req, res) => {
   res.status(200).send('hello world. I am updated.');
 });
-app.listen(port, () => console.log(`App running on port ${port}`));
+app.listen(port, () => console.log(`App running on port ${80}`));
+app.listen(443, () => console.log(`App running on port ${443}`));
