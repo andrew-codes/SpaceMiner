@@ -19,7 +19,7 @@ services:
         NODE_ENV: development
     working_dir: /app
     volumes:
-      - .:/app
+      - deps:/app
 
   web:
     image: node:10-alpine
@@ -29,7 +29,7 @@ services:
       API_HOST: api.localhost
       COMPOSE_CONVERT_WINDOWS_PATHS: $COMPOSE_CONVERT_WINDOWS_PATHS
     volumes:
-      - $PWD:/app
+      - deps:/app
     entrypoint:
       - yarn
       - start:dev
@@ -46,7 +46,7 @@ services:
     image: node:10-alpine
     working_dir: /app/apps/api
     volumes:
-      - $PWD:/app
+      - deps:/app
     depends_on:
       - deps
       - nginx-proxy
@@ -97,3 +97,4 @@ networks:
 
 volumes:
   data-db:
+  deps:
